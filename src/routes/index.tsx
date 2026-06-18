@@ -1,29 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/landing/Navbar";
+import { Hero } from "@/components/landing/Hero";
+import { About } from "@/components/landing/About";
+import { Services } from "@/components/landing/Services";
+import { Contact } from "@/components/landing/Contact";
+import { Footer } from "@/components/landing/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "Kaymou Projects — Civil Engineering & Construction" },
+      {
+        name: "description",
+        content:
+          "Premium road works, tar surfacing, paving and civil engineering by Kaymou Projects. Safety-first, on-time delivery for public and private clients.",
+      },
+      { property: "og:title", content: "Kaymou Projects — Civil Engineering & Construction" },
+      {
+        property: "og:description",
+        content:
+          "Premium road works, tar surfacing, paving and civil engineering. Safety-first, on-time delivery.",
+      },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="bg-[var(--color-background)] text-[var(--color-foreground)]">
+      <Navbar />
+      <Hero />
+      <About />
+      <Services />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
