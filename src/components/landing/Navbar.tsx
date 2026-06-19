@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { Menu, X, HardHat } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "@tanstack/react-router";
+import logo from "@/assets/client/logo.jpeg.asset.json";
 
 const links = [
-  { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Our Services", href: "#services" },
-  { label: "Get a Quote", href: "#quote" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Home", to: "/", hash: undefined as string | undefined },
+  { label: "About Us", to: "/", hash: "about" },
+  { label: "Our Services", to: "/services", hash: undefined },
+  { label: "Get a Quote", to: "/", hash: "quote" },
+  { label: "Contact Us", to: "/", hash: "contact" },
 ];
 
 export function Navbar() {
@@ -30,46 +32,57 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
-        <a href="#home" className="flex items-center gap-2.5 group">
-          <span
-            className={`w-9 h-9 rounded-lg grid place-items-center transition-colors ${
-              scrolled ? "bg-[var(--color-amber-brand)]" : "bg-[var(--color-amber-brand)]"
-            }`}
-          >
-            <HardHat className="w-5 h-5 text-[var(--color-slate-ink)]" />
+        <Link to="/" className="flex items-center gap-3 group">
+          <span className="h-12 w-12 rounded-lg overflow-hidden bg-[var(--color-amber-brand)] grid place-items-center">
+            <img
+              src={logo.url}
+              alt="Kaymou Projects logo"
+              className="h-full w-full object-cover"
+            />
           </span>
-          <span
-            className={`font-display font-bold text-lg tracking-tight transition-colors ${
-              scrolled ? "text-[var(--color-slate-ink)]" : "text-white"
-            }`}
-          >
-            Kaymou<span className="text-[var(--color-amber-brand)]">.</span>
+          <span className="hidden sm:flex flex-col leading-tight">
+            <span
+              className={`font-display font-bold text-base tracking-tight transition-colors ${
+                scrolled ? "text-[var(--color-slate-ink)]" : "text-white"
+              }`}
+            >
+              Kaymou Projects
+            </span>
+            <span
+              className={`text-[10px] uppercase tracking-[0.2em] transition-colors ${
+                scrolled ? "text-[var(--color-amber-brand-deep)]" : "text-[var(--color-amber-brand)]"
+              }`}
+            >
+              Done right the first time
+            </span>
           </span>
-        </a>
+        </Link>
 
         <ul className="hidden lg:flex items-center gap-1">
           {links.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
+            <li key={l.label}>
+              <Link
+                to={l.to}
+                hash={l.hash}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                   scrolled
                     ? "text-[var(--color-slate-ink)]/80 hover:text-[var(--color-amber-brand-deep)]"
-                    : "text-white/85 hover:text-white"
+                    : "text-white/90 hover:text-white"
                 }`}
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a
-          href="#quote"
+        <Link
+          to="/"
+          hash="quote"
           className="hidden lg:inline-flex items-center px-5 py-2.5 rounded-full bg-[var(--color-amber-brand)] text-[var(--color-slate-ink)] text-sm font-semibold hover:bg-[var(--color-amber-brand-deep)] hover:text-white transition-all hover:scale-[1.03]"
         >
           Get a Quote
-        </a>
+        </Link>
 
         <button
           aria-label="Toggle menu"
@@ -93,14 +106,15 @@ export function Navbar() {
           >
             <ul className="px-6 py-4 space-y-1">
               {links.map((l) => (
-                <li key={l.href}>
-                  <a
+                <li key={l.label}>
+                  <Link
                     onClick={() => setOpen(false)}
-                    href={l.href}
+                    to={l.to}
+                    hash={l.hash}
                     className="block px-3 py-2.5 rounded-md text-[var(--color-slate-ink)] hover:bg-[var(--color-muted)]"
                   >
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

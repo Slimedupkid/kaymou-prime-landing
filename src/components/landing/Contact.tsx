@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { Phone, Mail, MapPin, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { motion } from "framer-motion";
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string().trim().min(2, "Please enter your name").max(100),
+  phone: z.string().trim().min(7, "Please enter a valid contact number").max(30),
+  email: z.string().trim().email("Please enter a valid email").max(255),
+  message: z.string().trim().min(10, "Please give us a few details").max(2000),
+});
 
 function Field({
   label,
   type = "text",
   textarea,
+  error,
   ...rest
 }: {
   label: string;
@@ -14,6 +23,7 @@ function Field({
   textarea?: boolean;
   name: string;
   required?: boolean;
+  error?: string;
 }) {
   const [focused, setFocused] = useState(false);
   const [value, setValue] = useState("");
@@ -25,38 +35,120 @@ function Field({
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setValue(e.target.value),
     value,
-    className:
-      "peer w-full bg-[var(--color-slate-surface)] rounded-xl px-4 pt-6 pb-2.5 text-[var(--color-slate-ink)] outline-none border border-transparent focus:border-[var(--color-amber-brand)] focus:bg-white transition-all",
+    className: `peer w-full bg-[var(--color-slate-surface)] rounded-xl px-4 pt-6 pb-2.5 text-[var(--color-slate-ink)] outline-none border transition-all ${
+      error
+        ? "border-red-400 focus:border-red-500"
+        : "border-transparent focus:border-[var(--color-amber-brand)] focus:bg-white"
+    }`,
     ...rest,
   };
 
   return (
-    <label className="relative block">
-      {textarea ? (
-        <textarea rows={5} {...(shared as any)} />
-      ) : (
-        <input type={type} {...(shared as any)} />
+    <div>
+      <label className="relative block">
+        {textarea ? (
+          <textarea rows={5} {...(shared as any)} />
+        ) : (
+          <input type={type} {...(shared as any)} />
+        )}
+        <span
+          className={`absolute left-4 pointer-events-none transition-all ${
+            active
+              ? "top-2 text-xs text-[var(--color-amber-brand-deep)] font-medium"
+              : "top-4 text-sm text-[var(--color-muted-foreground)]"
+          }`}
+        >
+          {label}
+        </span>
+      </label>
+      {error && (
+        <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+          <AlertCircle className="w-3 h-3" /> {error}
+        </p>
       )}
-      <span
-        className={`absolute left-4 pointer-events-none transition-all ${
-          active
-            ? "top-2 text-xs text-[var(--color-amber-brand-deep)] font-medium"
-            : "top-4 text-sm text-[var(--color-muted-foreground)]"
-        }`}
-      >
-        {label}
-      </span>
-    </label>
+    </div>
   );
 }
 
 const contactItems = [
-  { Icon: Phone, label: "Phone", value: "+27 (0) 11 234 5678" },
-  { Icon: Mail, label: "Email", value: "info@kaymouprojects.co.za" },
-  { Icon: MapPin, label: "Office", value: "12 Industrial Road, Johannesburg" },
+  {
+    Icon: Phone,
+    label: "Phone",
+    lines: ["072 067 3976", "061 523 5934", "(086) 590 2178"],
+  },
+  { Icon: Mail, label: "Email", lines: ["info@kaymou.co.za"] },
+  {
+    Icon: MapPin,
+    label: "Durban Office",
+    lines: ["333 Anton Lembede Street", "Durban, 4001"],
+  },
+  {
+    Icon: MapPin,
+    label: "Johannesburg Office",
+    lines: ["38 Melle Street", "Braamfontein, Johannesburg, 2001"],
+  },
 ];
 
+type Status = "idle" | "submitting" | "success" | "error";
+
 export function Contact() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get("name") ?? ""),
+      phone: String(fd.get("phone") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      message: String(fd.get("message") ?? ""),
+    };
+
+    const parsed = schema.safeParse(payload);
+    if (!parsed.success) {
+      const fieldErrors: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? "");
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      return;
+    }
+    setErrors({});
+    setStatus("submitting");
+    setErrorMsg("");
+
+    try {
+      // FormSubmit.co — free contact-form forwarding service, no signup required.
+      // The first submission triggers a one-time confirmation email to the
+      // recipient address. After confirming, every submission is delivered.
+      const res = await fetch("https://formsubmit.co/ajax/info@kaymou.co.za", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          ...parsed.data,
+          _subject: `New quote request from ${parsed.data.name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      const json = (await res.json().catch(() => ({}))) as { success?: string | boolean };
+      if (json.success === false) throw new Error("Submission rejected");
+      setStatus("success");
+      form.reset();
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
+    }
+  }
+
   return (
     <section
       id="quote"
@@ -89,8 +181,8 @@ export function Contact() {
           </Reveal>
 
           <ul className="mt-12 space-y-6">
-            {contactItems.map(({ Icon, label, value }, i) => (
-              <Reveal key={label} delay={0.15 + i * 0.05}>
+            {contactItems.map(({ Icon, label, lines }, i) => (
+              <Reveal key={label} delay={0.1 + i * 0.05}>
                 <li className="flex items-start gap-4">
                   <span className="w-11 h-11 rounded-xl bg-[var(--color-amber-brand)]/15 border border-[var(--color-amber-brand)]/25 grid place-items-center shrink-0">
                     <Icon className="w-5 h-5 text-[var(--color-amber-brand)]" />
@@ -99,7 +191,11 @@ export function Contact() {
                     <div className="text-xs uppercase tracking-widest text-white/50">
                       {label}
                     </div>
-                    <div className="mt-1 text-white font-medium">{value}</div>
+                    <div className="mt-1 text-white font-medium space-y-0.5">
+                      {lines.map((line) => (
+                        <div key={line}>{line}</div>
+                      ))}
+                    </div>
                   </div>
                 </li>
               </Reveal>
@@ -109,10 +205,8 @@ export function Contact() {
 
         <Reveal delay={0.1}>
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert("Thanks — we'll be in touch shortly.");
-            }}
+            onSubmit={onSubmit}
+            noValidate
             className="bg-white rounded-3xl p-8 lg:p-10 text-[var(--color-slate-ink)] shadow-[var(--shadow-elevated)]"
           >
             <h3 className="font-display text-2xl font-bold">Request a Quote</h3>
@@ -120,24 +214,51 @@ export function Contact() {
               Fill in the details below and we'll be in touch.
             </p>
 
-            <div className="mt-8 space-y-4">
-              <Field name="name" label="Full Name" required />
-              <div className="grid sm:grid-cols-2 gap-4">
-                <Field name="phone" type="tel" label="Contact Number" required />
-                <Field name="email" type="email" label="Email Address" required />
+            {status === "success" ? (
+              <div className="mt-8 p-6 rounded-2xl bg-green-50 border border-green-200 flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-green-900">Message sent</h4>
+                  <p className="mt-1 text-sm text-green-800">
+                    Thanks — we've received your request and will reply within
+                    one business day.
+                  </p>
+                  <button
+                    onClick={() => setStatus("idle")}
+                    className="mt-3 text-sm font-semibold text-green-900 underline"
+                  >
+                    Send another message
+                  </button>
+                </div>
               </div>
-              <Field name="message" label="Tell us about your project" textarea required />
+            ) : (
+              <div className="mt-8 space-y-4">
+                <Field name="name" label="Full Name" required error={errors.name} />
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Field name="phone" type="tel" label="Contact Number" required error={errors.phone} />
+                  <Field name="email" type="email" label="Email Address" required error={errors.email} />
+                </div>
+                <Field name="message" label="Tell us about your project" textarea required error={errors.message} />
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[var(--color-slate-ink)] text-white font-semibold hover:bg-[var(--color-amber-brand)] hover:text-[var(--color-slate-ink)] transition-colors"
-              >
-                Send Request
-                <Send className="w-4 h-4" />
-              </motion.button>
-            </div>
+                {status === "error" && (
+                  <p className="text-sm text-red-600 flex items-center gap-1.5">
+                    <AlertCircle className="w-4 h-4" /> Couldn't send your
+                    message ({errorMsg}). Please email info@kaymou.co.za directly.
+                  </p>
+                )}
+
+                <motion.button
+                  whileHover={{ scale: status === "submitting" ? 1 : 1.02 }}
+                  whileTap={{ scale: status === "submitting" ? 1 : 0.98 }}
+                  type="submit"
+                  disabled={status === "submitting"}
+                  className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[var(--color-slate-ink)] text-white font-semibold hover:bg-[var(--color-amber-brand)] hover:text-[var(--color-slate-ink)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {status === "submitting" ? "Sending..." : "Send Request"}
+                  <Send className="w-4 h-4" />
+                </motion.button>
+              </div>
+            )}
           </form>
         </Reveal>
       </div>

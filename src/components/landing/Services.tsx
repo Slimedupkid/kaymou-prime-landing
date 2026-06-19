@@ -1,35 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
-import tar from "@/assets/service-tar.jpg";
-import paving from "@/assets/service-paving.jpg";
-import roadworks from "@/assets/service-roadworks.jpg";
-import kerbs from "@/assets/service-kerbs.jpg";
-
-const services = [
-  {
-    img: tar,
-    title: "Tar Surfaces",
-    desc: "Premium hot-mix asphalt surfacing engineered for durability and a flawless finish.",
-  },
-  {
-    img: paving,
-    title: "Paving",
-    desc: "Interlocking and decorative paving for driveways, walkways and commercial spaces.",
-  },
-  {
-    img: roadworks,
-    title: "Road Works",
-    desc: "End-to-end road construction, rehabilitation and resurfacing for public and private clients.",
-  },
-  {
-    img: kerbs,
-    title: "Kerbs & Drainage",
-    desc: "Precision kerbing and stormwater drainage that protects roads and properties for decades.",
-  },
-];
+import { services } from "./servicesData";
 
 export function Services() {
+  const preview = services.slice(0, 8);
+
   return (
     <section id="services" className="py-28 lg:py-36 bg-white">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -54,41 +31,59 @@ export function Services() {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.05}>
-              <motion.article
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                className="group h-full bg-white rounded-2xl border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] overflow-hidden flex flex-col transition-shadow"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={s.img}
-                    alt={s.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="font-display text-xl font-bold text-[var(--color-slate-ink)]">
-                    {s.title}
-                  </h3>
-                  <p className="mt-2 text-[var(--color-muted-foreground)] text-sm leading-relaxed flex-1">
-                    {s.desc}
-                  </p>
-                  <a
-                    href="#quote"
-                    className="mt-5 inline-flex items-center gap-1.5 text-[var(--color-amber-brand-deep)] font-semibold text-sm group-hover:gap-2.5 transition-all"
-                  >
-                    Request a quote
-                    <ArrowUpRight className="w-4 h-4" />
-                  </a>
-                </div>
-              </motion.article>
-            </Reveal>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {preview.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <Reveal key={s.slug} delay={i * 0.04}>
+                <motion.article
+                  whileHover={{ y: -6 }}
+                  transition={{ type: "spring", stiffness: 280, damping: 22 }}
+                  className="group h-full bg-white rounded-2xl border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] overflow-hidden flex flex-col transition-shadow"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={s.img}
+                      alt={s.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-3 left-3 w-10 h-10 rounded-xl bg-[var(--color-amber-brand)] grid place-items-center shadow-lg">
+                      <Icon className="w-5 h-5 text-[var(--color-slate-ink)]" />
+                    </span>
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3 className="font-display text-lg font-bold text-[var(--color-slate-ink)]">
+                      {s.title}
+                    </h3>
+                    <p className="mt-2 text-[var(--color-muted-foreground)] text-sm leading-relaxed flex-1">
+                      {s.desc}
+                    </p>
+                    <a
+                      href="/#quote"
+                      className="mt-5 inline-flex items-center gap-1.5 text-[var(--color-amber-brand-deep)] font-semibold text-sm group-hover:gap-2.5 transition-all"
+                    >
+                      Request a quote
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </motion.article>
+              </Reveal>
+            );
+          })}
         </div>
+
+        <Reveal delay={0.1}>
+          <div className="mt-14 flex justify-center">
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[var(--color-slate-ink)] text-white font-semibold hover:bg-[var(--color-amber-brand)] hover:text-[var(--color-slate-ink)] transition-colors"
+            >
+              View all {services.length} services
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
