@@ -1,9 +1,12 @@
-@import "tailwindcss" source(none);
-@source "../src";
+/* 1. Tailwind imports first */
+@import "tailwindcss";
 @import "tw-animate-css";
 
+/* 2. Source detection and variants */
+@source "../src";
 @custom-variant dark (&:is(.dark *));
 
+/* 3. Theme, Variables, and Layers follow */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
