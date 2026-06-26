@@ -15,12 +15,11 @@ export default defineConfig({
   ssr: {
     noExternal: [],
     external: ['tailwindcss', 'tw-animate-css'],
-  },
-  environments: {
-    ssr: {
-      resolve: {
-        external: ['tailwindcss', 'tw-animate-css'],
-      },
+    optimizeDeps: {
+      disabled: true,
     },
+  },
+  build: {
+    cssMinify: false,
   },
 })
