@@ -9,9 +9,6 @@ export default defineConfig({
     nitro(),
     viteReact(),
   ],
-  css: {
-    transformer: 'postcss',
-  },
   ssr: {
     noExternal: [],
     external: ['tailwindcss', 'tw-animate-css'],
@@ -22,6 +19,5 @@ export default defineConfig({
   },
   build: {
     cssMinify: false,
-    cssCodeSplit: false,
   },
 })
