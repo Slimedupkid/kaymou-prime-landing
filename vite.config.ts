@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import netlify from '@netlify/vite-plugin-tanstack-start'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
@@ -8,8 +7,7 @@ export default defineConfig({
     minify: 'esbuild',
   },
   plugins: [
-    tailwindcss(),   // 👈 add this
+    tailwindcss(),
     tanstackStart(),
-    netlify(),
   ],
 })
