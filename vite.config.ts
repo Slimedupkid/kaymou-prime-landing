@@ -1,17 +1,13 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, nitro (build-only using cloudflare as a default target),
-//     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
-//     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import netlify from '@netlify/vite-plugin-tanstack-start' // <-- Add this import
+import netlify from '@netlify/vite-plugin-tanstack-start'
 
 export default defineConfig({
+  build: {
+    minify: 'esbuild', // <--- Add this line to bypass LightningCSS issues
+  },
   plugins: [
     tanstackStart(),
-    netlify(), // <-- Add this to the array
-    // (leave any other existing plugins here)
+    netlify(),
   ],
 })
