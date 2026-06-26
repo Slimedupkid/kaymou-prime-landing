@@ -1,8 +1,8 @@
 import { CheckCircle2 } from "lucide-react";
 import { Reveal } from "./Reveal";
-import about2 from "@/assets/about-2.jpg";
-import portrait from "@/assets/client/about-portrait.jpeg.asset.json";
-import banner from "@/assets/client/about-banner.png.asset.json";
+import about2 from "@/assets/kaymou4.jpeg";
+import portrait from "@/assets/kaymou.jpeg"; 
+import banner from "@/assets/kaymou-3.png";
 
 const points = [
   "Well trained and skilled staff",
@@ -19,17 +19,19 @@ export function About() {
         <Reveal>
           <div className="grid grid-cols-6 grid-rows-6 gap-4 h-[560px]">
             <img
-              src={portrait.url}
+              src={portrait}
               alt="Kaymou Projects team member in branded safety gear"
               loading="lazy"
               className="col-span-4 row-span-6 w-full h-full object-cover object-top rounded-2xl shadow-[var(--shadow-elevated)]"
             />
+            
             <img
-              src={banner.url}
+              src={banner}
               alt="Kaymou Projects team — embracing the initiatives of construction"
               loading="lazy"
               className="col-span-2 row-span-3 w-full h-full object-cover rounded-2xl"
             />
+            
             <img
               src={about2}
               alt="Freshly paved highway with lane markings"
@@ -81,20 +83,6 @@ export function About() {
           </Reveal>
         </div>
       </div>
-
-      {/* Wide team banner */}
-      <Reveal delay={0.1}>
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 mt-16 lg:mt-24">
-          <div className="overflow-hidden rounded-3xl shadow-[var(--shadow-elevated)]">
-            <img
-              src={banner.url}
-              alt="Kaymou Projects team at work — embracing the initiatives of construction"
-              loading="lazy"
-              className="w-full h-auto object-cover"
-            />
-          </div>
-        </div>
-      </Reveal>
     </section>
   );
 }

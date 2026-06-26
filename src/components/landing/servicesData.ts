@@ -14,18 +14,22 @@ import {
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
+
 import tar from "@/assets/service-tar.jpg";
 import paving from "@/assets/service-paving.jpg";
 import roadworks from "@/assets/service-roadworks.jpg";
 import kerbs from "@/assets/service-kerbs.jpg";
-import work1 from "@/assets/client/work-1.jpeg.asset.json";
-import work2 from "@/assets/client/work-2.jpeg.asset.json";
-import work4 from "@/assets/client/work-4.jpeg.asset.json";
-import work5 from "@/assets/client/work-5.jpeg.asset.json";
-import work6 from "@/assets/client/work-6.jpeg.asset.json";
-import work7 from "@/assets/client/work-7.jpeg.asset.json";
-import work8 from "@/assets/client/work-8.jpeg.asset.json";
-import work9 from "@/assets/client/work-9.jpeg.asset.json";
+
+import work1 from "@/assets/img 1.jpeg";
+import work2 from "@/assets/img 2.jpeg";
+// Fixed the dash right here!
+import work3 from "@/assets/img-3.jpeg"; 
+import work4 from "@/assets/img 4.jpeg";
+import work5 from "@/assets/img 5.jpeg";
+import work6 from "@/assets/img 6.jpeg";
+import work7 from "@/assets/img 7.jpeg";
+import work8 from "@/assets/img 8.jpeg";
+import work9 from "@/assets/img 9.jpeg";
 
 export type Service = {
   slug: string;
@@ -41,14 +45,14 @@ export const services: Service[] = [
     title: "Solar Installations",
     desc: "Grid-tied and hybrid solar power systems for homes, businesses and remote sites.",
     icon: Sun,
-    img: work7.url,
+    img: work4, 
   },
   {
     slug: "plant-hire",
     title: "Plant Hire",
     desc: "Reliable construction plant and equipment for hire — operated or dry-hire.",
     icon: Truck,
-    img: work4.url,
+    img: work2, 
   },
   {
     slug: "tar-surfacing",
@@ -69,7 +73,7 @@ export const services: Service[] = [
     title: "Kerbing",
     desc: "Precision kerbing for roads, parking areas and stormwater control.",
     icon: Square,
-    img: work6.url,
+    img: work6, 
   },
   {
     slug: "building-construction",
@@ -83,14 +87,14 @@ export const services: Service[] = [
     title: "Concrete Works",
     desc: "Reinforced concrete slabs, foundations, retaining walls and structural pours.",
     icon: Box,
-    img: work8.url,
+    img: work8, 
   },
   {
     slug: "rigging",
     title: "Rigging",
     desc: "Certified rigging for heavy lifts, plant relocation and structural installations.",
     icon: Anchor,
-    img: work5.url,
+    img: work5, 
   },
   {
     slug: "structural-engineering",
@@ -104,27 +108,27 @@ export const services: Service[] = [
     title: "Quantitative Analysis",
     desc: "Detailed BOQs, cost estimation and quantity surveying to keep budgets on track.",
     icon: Calculator,
-    img: work2.url,
+    img: work3, 
   },
   {
     slug: "road-works",
     title: "Road Works",
     desc: "End-to-end road construction, rehabilitation, line-marking and resurfacing.",
     icon: RouteIcon,
-    img: work1.url,
+    img: work1, 
   },
   {
     slug: "sewage",
     title: "Sewage",
     desc: "Sewer reticulation, drainage and wastewater infrastructure done to spec.",
     icon: Droplets,
-    img: work6.url,
+    img: work7, 
   },
   {
     slug: "cleaning-services",
     title: "Cleaning Services",
     desc: "Post-construction, industrial and routine cleaning for sites and facilities.",
     icon: Sparkles,
-    img: work9.url,
+    img: work9, 
   },
 ];

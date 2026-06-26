@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/client/logo.jpeg.asset.json";
+
+// 1. Updated this import to point directly to your image file
+import logo from "@/assets/logo.jpeg";
 
 const links = [
   { label: "Home", to: "/", hash: undefined as string | undefined },
@@ -34,11 +36,14 @@ export function Navbar() {
       <nav className="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
           <span className="h-12 w-12 rounded-lg overflow-hidden bg-[var(--color-amber-brand)] grid place-items-center">
+            
+            {/* 2. Swapped the hardcoded path for the imported logo variable */}
             <img
-              src={logo.url}
+              src={logo}
               alt="Kaymou Projects logo"
               className="h-full w-full object-cover"
             />
+            
           </span>
           <span className="hidden sm:flex flex-col leading-tight">
             <span

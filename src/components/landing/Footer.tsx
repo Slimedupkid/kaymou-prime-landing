@@ -1,4 +1,5 @@
-import logo from "@/assets/client/logo.jpeg.asset.json";
+// 1. Updated import to point directly to the local image
+import logo from "@/assets/logo.jpeg";
 
 export function Footer() {
   return (
@@ -6,7 +7,10 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span className="w-9 h-9 rounded-lg overflow-hidden bg-[var(--color-amber-brand)] grid place-items-center">
-            <img src={logo.url} alt="Kaymou Projects" className="w-full h-full object-cover" />
+            
+            {/* 2. Removed the .url from the src attribute */}
+            <img src={logo} alt="Kaymou Projects" className="w-full h-full object-cover" />
+            
           </span>
           <span className="font-display font-bold text-white">
             Kaymou Projects

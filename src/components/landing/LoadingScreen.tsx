@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import logo from "@/assets/client/logo.jpeg.asset.json";
+
+// 1. Updated the import to point directly to your logo file
+import logo from "@/assets/logo.jpeg";
 
 export function LoadingScreen() {
   const [visible, setVisible] = useState(true);
@@ -43,11 +45,14 @@ export function LoadingScreen() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="w-24 h-24 rounded-2xl overflow-hidden shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6)] ring-2 ring-[var(--color-amber-brand)]/40"
             >
+              
+              {/* 2. Dropped the .url from the src attribute */}
               <img
-                src={logo.url}
+                src={logo}
                 alt="Kaymou Projects"
                 className="w-full h-full object-cover"
               />
+              
             </motion.div>
 
             <div className="text-center">
