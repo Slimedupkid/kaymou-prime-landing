@@ -12,4 +12,7 @@ export default defineConfig({
   css: {
     transformer: 'postcss',
   },
+  ssr: {
+    noExternal: [],
+  },
 })
