@@ -16,10 +16,12 @@ export default defineConfig({
     noExternal: [],
     external: ['tailwindcss', 'tw-animate-css'],
     optimizeDeps: {
-      disabled: true,
+      noDiscovery: true,
+      include: [],
     },
   },
   build: {
     cssMinify: false,
+    cssCodeSplit: false,
   },
 })
