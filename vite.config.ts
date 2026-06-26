@@ -9,4 +9,7 @@ export default defineConfig({
     nitro(),
     viteReact(),
   ],
+  css: {
+    transformer: 'postcss',
+  },
 })
