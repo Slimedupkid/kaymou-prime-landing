@@ -14,5 +14,6 @@ export default defineConfig({
   },
   ssr: {
     noExternal: [],
+    external: ['tailwindcss', 'tw-animate-css'],
   },
 })
